@@ -24,6 +24,9 @@ const createCollege = async function (req, res) {
         if (!isValid(logoLink)) return res.status(400).send({ status: false, message: "College Logo Link is required." })
         if(!urlRegex.test(logoLink)) return res.status(400).send({status:false, message:"Not a valid url." })
 
+        const findCollege = await collegeModel.findOne({fullName})
+        if(findCollege) return res.send({status:false, message:`${fullName} is already registered.` })
+
         const newCollege = await collegeModel.create(collegeData)
         res.status(201).send({ status: true, message: "College created succesfully.", data: newCollege })
 
@@ -47,10 +50,11 @@ const getCollegeDetails = async function (req, res) {
         const getCollegeId = getCollegeName._id
         const findIntern = await internModel.find({collegeId:getCollegeId, isDeleted:false}).select({name:1,email:1,mobile:1})
         
+
         if (Object.keys(findIntern).length === 0) return res.status(404).send({status:false, message:`No Internship applications submitted at ${collegeName} till now.`})
         
         const allInterns ={
-            name:getCollegeName._id,
+            name:getCollegeName.name,
             fullName:getCollegeName.fullName,
             logoLink:getCollegeName.logoLink,
             interests: findIntern

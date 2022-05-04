@@ -43,7 +43,7 @@ const createIntern = async function (req, res){
         if(!findCollege) return res.status(404).send({status:false, message: "College not Found."})
 
         const newIntern = await internModel.create(internData)
-        res.status(201).send({status:true, message:"Intern created successfully", data: newIntern})
+        res.status(201).send({status:true, message:"Internship application successful.", data: newIntern})
     }
     catch(err){
         return res.status(500).send({status:false, message:"Error", error: err.message})

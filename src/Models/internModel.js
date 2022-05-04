@@ -14,7 +14,8 @@ const internSchema = mongoose.Schema({
     name: {
         type:String,
         required: [true, "Name is required."],
-        trim: true
+        trim: true,
+        lowercase:true
     },
     email:{
         type:String,
