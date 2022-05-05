@@ -51,7 +51,7 @@ const getCollegeDetails = async function (req, res) {
         const findIntern = await internModel.find({collegeId:getCollegeId, isDeleted:false}).select({name:1,email:1,mobile:1})
         
 
-        if (Object.keys(findIntern).length === 0) return res.status(404).send({status:false, message:`No Internship applications submitted at ${collegeName} till now.`})
+        if (findIntern.length === 0) return res.status(404).send({status:false, message:`No Internship applications submitted at ${collegeName} till now.`})
         
         const allInterns ={
             name:getCollegeName.name,
@@ -68,3 +68,52 @@ const getCollegeDetails = async function (req, res) {
 
 module.exports.createCollege = createCollege
 module.exports.getCollegeDetails = getCollegeDetails
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// let findCollegeDetail = await collegeModel.findOne(getQueryData,{isDeleted:false}).select({createdAt:0,updatedAt:0,__v:0})
+//     if(!findCollegeDetail){return res.status(404).send({status : false,message :"College not found"})}
+   
+
+//     let findInternList = await internModel.find({collegeId :findCollegeDetail._id,isDeleted:false}).select({isDeleted:0,__v:0})
+    
+    
+//     findCollegeDetail.interests = findInternList
+//      let finalObj ={}
+//      finalObj.name = findCollegeDetail.name
+//      finalObj.fullName = findCollegeDetail.fullName
+//      finalObj.logoLink = findCollegeDetail.logoLink
+//      finalObj.interests = findCollegeDetail.interests
+
+//     return res.status(200).send({data:finalObj})
