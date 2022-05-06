@@ -5,6 +5,7 @@ let validateEmail = function(email) {
     let emailRegex = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/;
     return emailRegex.test(email)
 }
+
 let validateMobile = function(mobile){
     let mobileRegex = /^[0-9]{10}$/
     return mobileRegex.test(mobile)
@@ -31,7 +32,7 @@ const internSchema = mongoose.Schema({
         unique:true,
         validate:[validateMobile, "Please enter a valid email id"]
     },
-    collegeName:{
+    collegeId:{
         type:ObjectId,
         trim:true,
         refs: "College"
