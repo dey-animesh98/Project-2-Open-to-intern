@@ -1,10 +1,9 @@
 const collegeModel = require("../Models/collegeModel")
 const internModel = require("../Models/internModel")
-const ObjectId = require("mongoose").Types.ObjectId
 
-const nameRegex = /^[a-zA-Z\\s]*$/
+const nameRegex = /^[a-zA-Z ]{2,45}$/                                //  /^[a-zA-Z\\s]*$/   <--- will not consider space between
 const emailRegex = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/
-const mobileRegex = /^[0-9]{10}$/
+const mobileRegex = /^[6-9]\d{9}$/                                 // /^[0-9]{10}$/  <--Only verify numbers
 
 
 const isValid = function (value) {
@@ -22,19 +21,21 @@ const createIntern = async function (req, res) {
     try {
 
         const internData = req.body
-        const { name, email, mobile, collegeId } = internData
+        const { name, email, mobile, collegeName } = internData
 
         if (!isValidRequestBody(internData)) return res.status(400).send({ status: false, message: "No input by user.." })
 
         if (!isValid(name)) return res.status(400).send({ status: false, message: "Intern's name is required." })
         if (!isValid(email)) return res.status(400).send({ status: false, message: "Intern's email id is required." })
         if (!isValid(mobile)) return res.status(400).send({ status: false, message: "Intern's mobile no is required." })
-        if (!isValid(collegeId)) return res.status(400).send({ status: false, message: "Intern's college id is required." })
+        if (!isValid(collegeName)) return res.status(400).send({ status: false, message: "Intern's college name is required." })
 
         if (!nameRegex.test(name)) return res.status(400).send({ status: false, message: "Not a valid name." })
         if (!emailRegex.test(email)) return res.status(400).send({ status: false, message: "Please provide a valid email." })
-        if (!mobileRegex.test(mobile)) return res.status(400).send({ status: false, message: "Please provide a valid mobile no." })
-        if (!ObjectId.isValid(collegeId)) return res.status(400).send({ status: false, message: "Please provide a valid College Id." })
+        if (!mobileRegex.test(mobile)) return res.status(400).send({ status: false, message: "Please provide a valid mobile no. Mobile no should start 6-9." })
+
+        const getCollege = await collegeModel.findOne({ name: collegeName, isDeleted: false })
+        if (!getCollege) return res.status(404).send({ status: false, message: "college not found." })
 
         const usedEmail = await internModel.findOne({ email })
         if (usedEmail) return res.status(400).send({ status: false, message: "Email id already exists. Please use another email id." })
@@ -42,11 +43,18 @@ const createIntern = async function (req, res) {
         const usedMobile = await internModel.findOne({ mobile })
         if (usedMobile) return res.status(400).send({ status: false, message: "Mobile no already exists. Please use another mobile no.." })
 
-        const findCollege = await collegeModel.findById(collegeId)
-        if (!findCollege) return res.status(404).send({ status: false, message: "College not Found." })
+        const collegeId = getCollege._id
+        const newInternData = { name, email, mobile, collegeId }
 
-        const newIntern = await internModel.create(internData)
-        res.status(201).send({ status: true, message: "Internship application successful.", data: newIntern })
+        const Data = {
+            name: name,
+            email: email,
+            mobile: mobile,
+            collegeName: getCollege._id
+        }
+
+        const newIntern = await internModel.create(newInternData)
+        res.status(201).send({ status: true, message: "Internship application successful.", data: Data })
     }
     catch (err) {
         return res.status(500).send({ status: false, message: "Error", error: err.message })

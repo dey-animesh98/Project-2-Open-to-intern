@@ -7,7 +7,7 @@ let validateEmail = function(email) {
 }
 
 let validateMobile = function(mobile){
-    let mobileRegex = /^[0-9]{10}$/
+    let mobileRegex = /^[6-9]\d{9}$/
     return mobileRegex.test(mobile)
 }
 

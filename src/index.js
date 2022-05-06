@@ -3,7 +3,7 @@ const bodyParser = require("body-parser")
 const route = require("./Routes/routes")
 const { default: mongoose } = require("mongoose")
 const app = express()
-const port = 5500
+const port = 3000
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
