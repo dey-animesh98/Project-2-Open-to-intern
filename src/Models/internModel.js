@@ -31,7 +31,7 @@ const internSchema = mongoose.Schema({
         unique:true,
         validate:[validateMobile, "Please enter a valid email id"]
     },
-    collegeName:{
+    collegeId:{
         type:ObjectId,
         trim:true,
         refs: "College"
