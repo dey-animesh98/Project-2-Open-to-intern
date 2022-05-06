@@ -51,7 +51,7 @@ const getCollegeDetails = async function (req, res) {
         const findIntern = await internModel.find({collegeId:getCollegeId, isDeleted:false}).select({name:1,email:1,mobile:1})
         
 
-        if (Object.keys(findIntern).length === 0) return res.status(404).send({status:false, message:`No Internship applications submitted at ${collegeName} till now.`})
+        if (findIntern.length === 0) return res.status(404).send({status:false, message:`No Internship applications submitted at ${collegeName} till now.`})
         
         const allInterns ={
             name:getCollegeName.name,
@@ -68,3 +68,5 @@ const getCollegeDetails = async function (req, res) {
 
 module.exports.createCollege = createCollege
 module.exports.getCollegeDetails = getCollegeDetails
+
+
