@@ -10,6 +10,8 @@ const isValidRequestBody = function (request) {
     return (Object.keys(request).length > 0)
 }
 
+const nameRegex = /^[a-zA-Z\\s]*$/
+
 const urlRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/
 
 // Create College
@@ -22,6 +24,8 @@ const createCollege = async function (req, res) {
         if (!isValid(name)) return res.status(400).send({ status: false, message: "College name is required." })
         if (!isValid(fullName)) return res.status(400).send({ status: false, message: "College Full name is required." })
         if (!isValid(logoLink)) return res.status(400).send({ status: false, message: "College Logo Link is required." })
+       
+        if (!nameRegex.test(name)) return res.status(400).send({ status: false, message: "Not a valid name." })
         if(!urlRegex.test(logoLink)) return res.status(400).send({status:false, message:"Not a valid url." })
 
         const findCollegeName = await collegeModel.findOne({name})

@@ -2,8 +2,10 @@ const collegeModel = require("../Models/collegeModel")
 const internModel = require("../Models/internModel")
 const ObjectId = require("mongoose").Types.ObjectId
 
+const nameRegex = /^[a-zA-Z\\s]*$/
 const emailRegex = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/
 const mobileRegex = /^[0-9]{10}$/
+
 
 const isValid = function (value) {
     if (typeof value === 'undefined' || value === null) return false
@@ -29,6 +31,7 @@ const createIntern = async function (req, res) {
         if (!isValid(mobile)) return res.status(400).send({ status: false, message: "Intern's mobile no is required." })
         if (!isValid(collegeId)) return res.status(400).send({ status: false, message: "Intern's college id is required." })
 
+        if (!nameRegex.test(name)) return res.status(400).send({ status: false, message: "Not a valid name." })
         if (!emailRegex.test(email)) return res.status(400).send({ status: false, message: "Please provide a valid email." })
         if (!mobileRegex.test(mobile)) return res.status(400).send({ status: false, message: "Please provide a valid mobile no." })
         if (!ObjectId.isValid(collegeId)) return res.status(400).send({ status: false, message: "Please provide a valid College Id." })
