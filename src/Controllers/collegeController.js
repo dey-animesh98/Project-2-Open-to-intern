@@ -24,8 +24,8 @@ const createCollege = async function (req, res) {
         if (!isValid(logoLink)) return res.status(400).send({ status: false, message: "College Logo Link is required." })
         if(!urlRegex.test(logoLink)) return res.status(400).send({status:false, message:"Not a valid url." })
 
-        const findCollege = await collegeModel.findOne({fullName})
-        if(findCollege) return res.send({status:false, message:`${fullName} is already registered.` })
+        const findCollegeName = await collegeModel.findOne({name})
+        if(findCollegeName) return res.send({status:false, message:`${name} is already registered.` })
 
         const newCollege = await collegeModel.create(collegeData)
         res.status(201).send({ status: true, message: "College created succesfully.", data: newCollege })
