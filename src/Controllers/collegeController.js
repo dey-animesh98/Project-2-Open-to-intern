@@ -45,6 +45,7 @@ const createCollege = async function (req, res) {
 // Get College Details
 const getCollegeDetails = async function (req, res) {
     try {
+        res.setHeader('Access-Control-Allow-Origin','*')
         const userQuery = req.query
         if (!isValidRequestBody(userQuery)) return res.status(400).send({ status: false, message: "No college name entered." })
 
@@ -63,6 +64,7 @@ const getCollegeDetails = async function (req, res) {
             name: getCollegeName.name,
             fullName: getCollegeName.fullName,
             logoLink: getCollegeName.logoLink,
+            totalApplications:findIntern.length,
             interests: findIntern
         }
         res.status(200).send({ status: true, data: allInterns })

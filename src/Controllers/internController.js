@@ -1,9 +1,9 @@
 const collegeModel = require("../Models/collegeModel")
 const internModel = require("../Models/internModel")
 
-const nameRegex = /^[a-zA-Z ]{2,45}$/                                //  /^[a-zA-Z\\s]*$/   <--- will not consider space between
+const nameRegex = /^[a-zA-Z ]{2,45}$/                                   //  /^[a-zA-Z\\s]*$/   <--- will not consider space between
 const emailRegex = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/
-const mobileRegex = /^[6-9]\d{9}$/                                 // /^[0-9]{10}$/  <--Only verify numbers
+const mobileRegex = /^[6-9]\d{9}$/                                      // /^[0-9]{10}$/  <--Only verify numbers
 
 
 const isValid = function (value) {
@@ -19,7 +19,7 @@ const isValidRequestBody = function (request) {
 // Create Intern
 const createIntern = async function (req, res) {
     try {
-
+        res.setHeader('Access-Control-Allow-Origin','*')
         const internData = req.body
         const { name, email, mobile, collegeName } = internData
 
@@ -46,15 +46,8 @@ const createIntern = async function (req, res) {
         const collegeId = getCollege._id
         const newInternData = { name, email, mobile, collegeId }
 
-        const Data = {
-            name: name,
-            email: email,
-            mobile: mobile,
-            collegeName: getCollege._id
-        }
-
         const newIntern = await internModel.create(newInternData)
-        res.status(201).send({ status: true, message: "Internship application successful.", data: Data })
+        res.status(201).send({ status: true, message: "Internship application successful.", data: newIntern })
     }
     catch (err) {
         return res.status(500).send({ status: false, message: "Error", error: err.message })
